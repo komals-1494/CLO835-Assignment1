@@ -32,7 +32,7 @@ jobs:
         IMAGE_TAG: "latest"
       run: |
         cd application/
-        docker build -t $ECR_REGISTRY/mysqp-repo:${IMAGE_TAG} -f Dockerfile_mysql .
-        docker build -t $ECR_REGISTRY/webapp-repo:${IMAGE_TAG} .
-        docker push $ECR_REGISTRY/mysql-repo:${IMAGE_TAG}
-        docker push $ECR_REGISTRY/webapp-repo:${IMAGE_TAG}
+        docker build -t 402242685480.dkr.ecr.us-east-1.amazonaws.com/mysql-repo:${IMAGE_TAG} -f Dockerfile_mysql .
+        docker build -t 402242685480.dkr.ecr.us-east-1.amazonaws.com/webapp-repo:${IMAGE_TAG} .
+        docker push 402242685480.dkr.ecr.us-east-1.amazonaws.com/mysql-repo:${IMAGE_TAG}
+        docker push 402242685480.dkr.ecr.us-east-1.amazonaws.com/webapp-repo:${IMAGE_TAG}
