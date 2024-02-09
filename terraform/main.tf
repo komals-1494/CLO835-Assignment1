@@ -12,17 +12,9 @@ resource "aws_ecr_repository" "mysql_repo" {
   name = "mysql-repo"
 }
 
-# Create a new VPC 
-resource "aws_vpc" "main" {
-  cidr_block       = "10.50.0.0/16"
-  instance_tenancy = "default"
-  }
-
-# Add provisioning of the public subnet in the default VPC
-resource "aws_subnet" "public_subnet" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.50.0.0/24"
-  availability_zone = "us-east-1a"
+# Data block to retrieve the default VPC id
+data "aws_vpc" "default" {
+  default = true
 }
 
 # Data source for AMI id
@@ -40,8 +32,7 @@ resource "aws_instance" "web_server" {
   ami                         = data.aws_ami.latest_amazon_linux.id
   instance_type               = "t2.micro"
   key_name                    = aws_key_pair.web_key.key_name
-  subnet_id                   = aws_subnet.public_subnet.id
-  security_groups             = [aws_security_group.web_sg.id]
+  vpc_security_group_ids      = [aws_security_group.web_sg.id]
   associate_public_ip_address = true
 
   lifecycle {
@@ -64,12 +55,12 @@ resource "aws_security_group" "web_sg" {
 
   name        = "web sg"
   description = "Security Group for Ports 80, 8081, 8082, 8083"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = data.aws_vpc.default.id
 
 ingress {
     from_port   = 22
     to_port     = 22
-    protocol    = "ssh"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
