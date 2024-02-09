@@ -66,7 +66,14 @@ resource "aws_security_group" "web_sg" {
   description = "Security Group for Ports 80, 8081, 8082, 8083"
   vpc_id      = aws_vpc.main.id
 
-  ingress {
+ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "ssh"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
